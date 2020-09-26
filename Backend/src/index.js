@@ -18,7 +18,11 @@ mongoose.connect(process.env.DATABASE_URL, {
 
 app.use(morgan("common"));
 app.use(helmet());
-app.use(cors());
+app.use(
+  cors({
+    origin: process.env.CORS_ORIGIN,
+  })
+);
 app.use(express.json());
 
 app.use(
@@ -29,7 +33,7 @@ app.use(
 
 app.get("/", (req, res) => {
   res.json({
-    message: "Hello World!",
+    message: "Hello World! 🎉",
   });
 });
 
