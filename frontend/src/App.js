@@ -4,12 +4,15 @@ import { useState } from "react";
 import ReactMapGL, { Marker, Popup } from "react-map-gl";
 
 import { listTravelHistories } from "./API";
+import EnterTravelHistory from "./EnterTravelHistory";
 
 require("dotenv").config();
 
 function App() {
+  // eslint-disable-next-line
   const [travelHistories, setTravelHistories] = useState([]);
   const [showPopup, setShowPopup] = useState({});
+  const [addEntryLocation, setAddEntryLocation] = useState(null);
 
   const [viewport, setViewport] = useState({
     width: "100vw",
@@ -19,15 +22,24 @@ function App() {
     zoom: 4,
   });
 
+  const getEntries = async () => {
+    const travelHistories = await listTravelHistories();
+    setTravelHistories(travelHistories);
+  };
+
   useEffect(() => {
-    (async () => {
-      const travelHistories = await listTravelHistories();
-      setTravelHistories(travelHistories);
-    })();
+    
+    getEntries();
   }, []);
 
   const showAddingMarkerPopup = (event) => {
-    console.log(event);
+    const [longitude, latitude] = event.lngLat;
+
+    setAddEntryLocation({
+      
+      longitude,
+      latitude,
+    });
   };
 
   return (
@@ -39,13 +51,9 @@ function App() {
       onDblClick={showAddingMarkerPopup}
     >
       {travelHistories.map((entry) => (
-        <>
-          <Marker
-            key={entry._id}
-            latitude={entry.latitude}
-            longitude={entry.longitude}
-          >
-            {/* <div>{entry.title}</div> */}
+        <React.Fragment key={entry._id}>
+          <Marker latitude={entry.latitude} longitude={entry.longitude}>
+            
 
             <div
               onClick={() =>
@@ -56,7 +64,7 @@ function App() {
               }
             >
               <img
-                class="marker"
+                className="marker"
                 style={{
                   height: `${6 * viewport.zoom}px`,
                   width: `${6 * viewport.zoom}px`,
@@ -72,7 +80,7 @@ function App() {
               longitude={entry.longitude}
               closeButton={true}
               closeOnClick={false}
-              dynamicPosition={false}
+              dynamicPosition={true}
               onClose={() => setShowPopup({})}
               anchor="top"
             >
@@ -85,8 +93,51 @@ function App() {
               </div>
             </Popup>
           ) : null}
-        </>
+        </React.Fragment>
       ))}
+
+      {addEntryLocation ? (
+        <>
+          <Marker
+            latitude={addEntryLocation.latitude}
+            longitude={addEntryLocation.longitude}
+          >
+            
+
+            <div>
+              <img
+                className="marker"
+                style={{
+                  height: `${6 * viewport.zoom}px`,
+                  width: `${6 * viewport.zoom}px`,
+                }}
+                src="https://i.ibb.co/NZs4nj2/g-pointer.png"
+                alt="marker"
+              />
+            </div>
+          </Marker>
+          <Popup
+            longitude={addEntryLocation.longitude}
+            latitude={addEntryLocation.latitude}
+            
+            closeButton={true}
+            closeOnClick={false}
+            dynamicPosition={true}
+            onClose={() => setAddEntryLocation(null)}
+            anchor="top"
+          >
+            <div className="popup">
+              <EnterTravelHistory
+                onClose={() => {
+                  setAddEntryLocation(null);
+                 // getEntries();
+                }}
+                location={addEntryLocation}
+              />
+            </div>
+          </Popup>
+        </>
+      ) : null}
     </ReactMapGL>
   );
 }
