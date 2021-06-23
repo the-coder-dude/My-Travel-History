@@ -1,4 +1,4 @@
-const API_URL = "http://localhost:1880";
+const API_URL = "https://my-travel-history-api.herokuapp.com";  //REST API URL
 
 export async function listTravelHistories() {
   const response = await fetch(`${API_URL}/routes/history`);
