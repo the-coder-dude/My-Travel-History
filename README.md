@@ -8,7 +8,7 @@ This Web app can be accessed by visiting: https://mytravelhistory.netlify.app/ (
 
 # 🤔 Purpose
 
-Serve as a online travel book for people to share locations, photos and memories with others. 😍
+Serves as an online travel book for people to share locations, photos and memories with others. 😍
 
 
 # 🧐 Demo
