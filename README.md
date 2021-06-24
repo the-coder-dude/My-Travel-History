@@ -3,7 +3,7 @@
 A full-stack web app that keeps tracks of the places you visited, shows and saves travel locations.
 
 
-➡️ Visit : https://mytravelhistory.biz/ (under development) ⬅️
+### ➡️ Visit : https://mytravelhistory.biz/ (under development) ⬅️
 
 
 # 🤔 Purpose
